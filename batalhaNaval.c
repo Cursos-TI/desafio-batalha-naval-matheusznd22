@@ -1,40 +1,72 @@
-#include <stdio.h>
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batalha Naval Simples</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            margin: 20px;
+        }
+        td {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+        td.hit {
+            background-color: red;
+        }
+        td.miss {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+<body>
+    <h1>Batalha Naval - Jogo Simples</h1>
+    <table id="board"></table>
+    <p id="message"></p>
 
-// Desafio Batalha Naval - MateCheck
-// Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
-// Siga os comentários para implementar cada parte do desafio.
+    <script>
+        const boardSize = 5; // Tamanho do tabuleiro (5x5)
+        const shipRow = 2;   // Posição do navio (linha)
+        const shipCol = 2;   // Posição do navio (coluna)
 
-int main() {
-    // Nível Novato - Posicionamento dos Navios
-    // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
-    // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
-    // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
+        // Função para criar o tabuleiro
+        function createBoard() {
+            const table = document.getElementById("board");
+            for (let row = 0; row < boardSize; row++) {
+                const tr = document.createElement("tr");
+                for (let col = 0; col < boardSize; col++) {
+                    const td = document.createElement("td");
+                    td.setAttribute("data-row", row);
+                    td.setAttribute("data-col", col);
+                    td.addEventListener("click", handleClick);
+                    tr.appendChild(td);
+                }
+                table.appendChild(tr);
+            }
+        }
 
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
+        // Função para tratar o clique do usuário
+        function handleClick(event) {
+            const row = event.target.getAttribute("data-row");
+            const col = event.target.getAttribute("data-col");
 
-    // Nível Mestre - Habilidades Especiais com Matrizes
-    // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
-    // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
-    // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
+            // Verifica se acertou o navio
+            if (row == shipRow && col == shipCol) {
+                event.target.classList.add("hit");
+                document.getElementById("message").textContent = "Você acertou o navio!";
+            } else {
+                event.target.classList.add("miss");
+                document.getElementById("message").textContent = "Você errou!";
+            }
+        }
 
-    // Exemplos de exibição das habilidades:
-    // Exemplo para habilidade em cone:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 1 1 1 1 1
-    
-    // Exemplo para habilidade em octaedro:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 0 0 1 0 0
-
-    // Exemplo para habilidade em cruz:
-    // 0 0 1 0 0
-    // 1 1 1 1 1
-    // 0 0 1 0 0
-
-    return 0;
-}
+        // Inicializa o tabuleiro ao carregar a página
+        createBoard();
+    </script>
+</body>
+</html>
