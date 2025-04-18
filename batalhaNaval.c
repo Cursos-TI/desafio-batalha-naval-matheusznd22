@@ -1,40 +1,84 @@
 #include <stdio.h>
 
-// Desafio Batalha Naval - MateCheck
-// Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
-// Siga os comentários para implementar cada parte do desafio.
+#define TAM 10        // Tamanho do tabuleiro
+#define TAM_NAVIO 3   // Tamanho fixo dos navios
+#define NAVIO 3       // Valor usado para representar parte de um navio
+#define AGUA 0        // Valor usado para representar água
+
+// Função para imprimir o tabuleiro no console
+void exibirTabuleiro(int tabuleiro[TAM][TAM]) {
+    printf("Tabuleiro Batalha Naval (0 = água, 3 = navio):\n\n");
+    for (int i = 0; i < TAM; i++) {
+        for (int j = 0; j < TAM; j++) {
+            printf("%d ", tabuleiro[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+// Função para verificar se é possível posicionar um navio sem ultrapassar limites e sem sobreposição
+int podePosicionar(int tabuleiro[TAM][TAM], int linha, int coluna, int direcao, int tipoDiagonal) {
+    for (int i = 0; i < TAM_NAVIO; i++) {
+        int l = linha + (tipoDiagonal ? i : (direcao == 1 ? i : 0));
+        int c;
+
+        if (tipoDiagonal == 1) // ↘
+            c = coluna + i;
+        else if (tipoDiagonal == 2) // ↙
+            c = coluna - i;
+        else // horizontal ou vertical
+            c = coluna + (direcao == 0 ? i : 0);
+
+        // Valida se a posição está dentro dos limites
+        if (l < 0 || l >= TAM || c < 0 || c >= TAM)
+            return 0;
+
+        // Verifica sobreposição
+        if (tabuleiro[l][c] != AGUA)
+            return 0;
+    }
+    return 1;
+}
+
+// Função para posicionar um navio no tabuleiro
+void posicionarNavio(int tabuleiro[TAM][TAM], int linha, int coluna, int direcao, int tipoDiagonal) {
+    for (int i = 0; i < TAM_NAVIO; i++) {
+        int l = linha + (tipoDiagonal ? i : (direcao == 1 ? i : 0));
+        int c;
+
+        if (tipoDiagonal == 1) // ↘
+            c = coluna + i;
+        else if (tipoDiagonal == 2) // ↙
+            c = coluna - i;
+        else // horizontal ou vertical
+            c = coluna + (direcao == 0 ? i : 0);
+
+        tabuleiro[l][c] = NAVIO;
+    }
+}
 
 int main() {
-    // Nível Novato - Posicionamento dos Navios
-    // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
-    // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
-    // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
+    int tabuleiro[TAM][TAM] = {0}; // Inicializa o tabuleiro com água
 
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
+    // Navio 1 - horizontal
+    if (podePosicionar(tabuleiro, 2, 1, 0, 0))
+        posicionarNavio(tabuleiro, 2, 1, 0, 0);
 
-    // Nível Mestre - Habilidades Especiais com Matrizes
-    // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
-    // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
-    // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
+    // Navio 2 - vertical
+    if (podePosicionar(tabuleiro, 5, 5, 1, 0))
+        posicionarNavio(tabuleiro, 5, 5, 1, 0);
 
-    // Exemplos de exibição das habilidades:
-    // Exemplo para habilidade em cone:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 1 1 1 1 1
-    
-    // Exemplo para habilidade em octaedro:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 0 0 1 0 0
+    // Navio 3 - diagonal ↘
+    if (podePosicionar(tabuleiro, 0, 0, 0, 1))
+        posicionarNavio(tabuleiro, 0, 0, 0, 1);
 
-    // Exemplo para habilidade em cruz:
-    // 0 0 1 0 0
-    // 1 1 1 1 1
-    // 0 0 1 0 0
+    // Navio 4 - diagonal ↙
+    if (podePosicionar(tabuleiro, 0, 9, 0, 2))
+        posicionarNavio(tabuleiro, 0, 9, 0, 2);
+
+    // Exibir tabuleiro
+    exibirTabuleiro(tabuleiro);
 
     return 0;
 }
+
